@@ -1,5 +1,6 @@
 # ELearning Blog - Vue 3 Project
 
+Bai tap 4 - Lap Trinh Mang
 Dự án Vue 3 hoàn chỉnh với Blog Management System theo cấu trúc chuẩn.
 
 ## 📁 Cấu trúc dự án
