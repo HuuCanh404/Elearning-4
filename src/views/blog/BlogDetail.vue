@@ -2,7 +2,8 @@
 /**
  * ===========================================
  * BLOG DETAIL VIEW
- * Chi tiết bài viết (Public - View)
+ * Chi tiet bai viet (Public - View)
+ * Ho tro phan quyen: Admin va Owner co the Sua/Xoa
  * ===========================================
  */
 import { ref, onMounted, computed } from 'vue'
