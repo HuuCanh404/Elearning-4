@@ -2,6 +2,7 @@
  * ===========================================
  * ENVIRONMENT CONFIGURATION
  * Global Variables & Environment Variables
+ * Cau hinh bien moi truong va bien toan cuc
  * ===========================================
  */
 
