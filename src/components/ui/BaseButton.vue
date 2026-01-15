@@ -2,7 +2,8 @@
 /**
  * ===========================================
  * BASE BUTTON COMPONENT
- * Component button dùng chung
+ * Component button dung chung
+ * Variants: primary, secondary, outline, danger, ghost
  * ===========================================
  */
 import { computed } from 'vue'
