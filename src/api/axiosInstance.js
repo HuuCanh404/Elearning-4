@@ -1,7 +1,8 @@
 /**
  * ===========================================
  * AXIOS INSTANCE
- * Cấu hình Axios cho API calls
+ * Cau hinh Axios cho API calls
+ * Ho tro Request/Response Interceptors
  * ===========================================
  */
 
