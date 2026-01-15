@@ -1,7 +1,8 @@
 /**
  * ===========================================
  * BLOG API
- * API quản lý Blog - Public & Private API
+ * API quan ly Blog - Public & Private API
+ * CRUD, Upload, Search, Sort
  * ===========================================
  */
 
