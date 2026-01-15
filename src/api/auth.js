@@ -1,7 +1,8 @@
 /**
  * ===========================================
  * AUTH API
- * API xác thực - Public API
+ * API xac thuc - Public API
+ * Endpoints: login, register, logout, refresh
  * ===========================================
  */
 
