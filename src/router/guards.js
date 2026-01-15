@@ -1,7 +1,8 @@
 /**
  * ===========================================
  * NAVIGATION GUARDS
- * Bảo vệ routes
+ * Bao ve routes - Phan quyen truy cap
+ * authGuard, guestGuard, adminGuard, roleGuard
  * ===========================================
  */
 
