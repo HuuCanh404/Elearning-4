@@ -1,7 +1,8 @@
 /**
  * ===========================================
  * AUTH STORE
- * Pinia Store - Quản lý xác thực
+ * Pinia Store - Quan ly xac thuc
+ * State: user, token, isAuthenticated, isAdmin
  * ===========================================
  */
 
