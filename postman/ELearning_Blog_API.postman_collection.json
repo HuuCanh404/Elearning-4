@@ -1,0 +1,615 @@
+{
+  "info": {
+    "name": "ELearning Blog API",
+    "description": "API Collection cho dự án ELearning Blog Vue 3\n\nBao gồm:\n- Authentication (Public API)\n- User Management (Private API)\n- Blog Management (Public & Private API)\n\nBase URL: {{base_url}}/api",
+    "_postman_id": "elearning-blog-api-collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "API xác thực - Public API",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Đăng nhập và nhận access token\n\nRequest:\n- email: string (required)\n- password: string (required)\n\nResponse:\n- user: object\n- access_token: string\n- refresh_token: string\n- token_type: string\n- expires_in: number"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"user\": {\n            \"id\": 1,\n            \"name\": \"Admin\",\n            \"email\": \"admin@example.com\",\n            \"role\": \"admin\"\n        },\n        \"access_token\": \"eyJ...\",\n        \"refresh_token\": \"eyJ...\",\n        \"token_type\": \"Bearer\",\n        \"expires_in\": 3600\n    }\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.access_token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"New User\",\n    \"email\": \"newuser@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Đăng ký tài khoản mới"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "description": "Đăng xuất và hủy token"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Lấy thông tin user đang đăng nhập"
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh_token\": \"your_refresh_token_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "refresh"]
+            },
+            "description": "Làm mới access token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Blog - Public",
+      "description": "API Blog công khai - Không cần xác thực",
+      "item": [
+        {
+          "name": "Get All Blogs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/blogs?page=1&per_page=10&status=published",
+              "host": ["{{base_url}}"],
+              "path": ["api", "blogs"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "published"
+                }
+              ]
+            },
+            "description": "Lấy danh sách tất cả bài viết (public)\n\nQuery params:\n- page: Số trang\n- per_page: Số item mỗi trang\n- search: Từ khóa tìm kiếm\n- sort_by: Sắp xếp theo (created_at, title, views)\n- sort_order: asc/desc\n- status: draft/published/archived\n- category_id: Lọc theo danh mục"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Bắt đầu với Vue 3\",\n            \"slug\": \"bat-dau-voi-vue-3\",\n            \"excerpt\": \"Hướng dẫn chi tiết...\",\n            \"thumbnail\": \"https://...\",\n            \"status\": \"published\",\n            \"views\": 150,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Admin\"\n            },\n            \"category\": {\n                \"id\": 1,\n                \"name\": \"Lập trình\"\n            },\n            \"created_at\": \"2024-01-01T00:00:00Z\"\n        }\n    ],\n    \"meta\": {\n        \"page\": 1,\n        \"per_page\": 10,\n        \"total\": 100,\n        \"total_pages\": 10\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Blog by ID (View)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/blogs/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "blogs", "1"]
+            },
+            "description": "Xem chi tiết một bài viết theo ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Blogs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/blogs/search?q=vue&page=1&per_page=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "blogs", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "vue"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Tìm kiếm bài viết theo từ khóa"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort Blogs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/blogs?sort_by=views&sort_order=desc&page=1&per_page=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "blogs"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "views",
+                  "description": "Sort by: created_at, updated_at, title, views"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "desc",
+                  "description": "Sort order: asc, desc"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Sắp xếp danh sách bài viết theo các tiêu chí"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Blog - Private",
+      "description": "API Blog yêu cầu xác thực - Cần Bearer Token",
+      "item": [
+        {
+          "name": "Create Blog",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Tiêu đề bài viết mới\",\n    \"content\": \"<h2>Nội dung bài viết</h2><p>Đây là nội dung bài viết...</p>\",\n    \"excerpt\": \"Mô tả ngắn về bài viết\",\n    \"thumbnail\": \"https://example.com/image.jpg\",\n    \"category_id\": 1,\n    \"tags\": [\"vue\", \"javascript\"],\n    \"status\": \"draft\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/blogs",
+              "host": ["{{base_url}}"],
+              "path": ["api", "blogs"]
+            },
+            "description": "Tạo bài viết mới\n\nRequest body:\n- title: string (required)\n- content: string (required)\n- excerpt: string\n- thumbnail: string (URL)\n- category_id: number\n- tags: array of strings\n- status: 'draft' | 'published'"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Blog created successfully\",\n    \"data\": {\n        \"id\": 4,\n        \"title\": \"Tiêu đề bài viết mới\",\n        \"slug\": \"tieu-de-bai-viet-moi\",\n        \"status\": \"draft\",\n        \"created_at\": \"2024-01-15T00:00:00Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Blog",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Tiêu đề đã cập nhật\",\n    \"content\": \"<h2>Nội dung mới</h2><p>Đã cập nhật...</p>\",\n    \"excerpt\": \"Mô tả mới\",\n    \"status\": \"published\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/blogs/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "blogs", "1"]
+            },
+            "description": "Cập nhật bài viết theo ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Blog",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/blogs/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "blogs", "1"]
+            },
+            "description": "Xóa bài viết theo ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Blog Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "File ảnh (JPG, PNG, GIF, WebP - Max 5MB)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/blogs/upload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "blogs", "upload"]
+            },
+            "description": "Upload ảnh cho bài viết\n\nRequest:\n- image: file (required)\n\nResponse:\n- url: string (URL của ảnh)\n- filename: string\n- size: number"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Image uploaded successfully\",\n    \"data\": {\n        \"url\": \"https://example.com/uploads/image-123.jpg\",\n        \"filename\": \"image-123.jpg\",\n        \"size\": 102400\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get My Blogs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/blogs/my-blogs?page=1&per_page=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "blogs", "my-blogs"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Lấy danh sách bài viết của user đang đăng nhập"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users - Private",
+      "description": "API quản lý người dùng - Cần Bearer Token",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users?page=1&per_page=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Lấy danh sách tất cả người dùng (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            },
+            "description": "Lấy thông tin người dùng theo ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Tên mới\",\n    \"bio\": \"Giới thiệu về bản thân\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "profile"]
+            },
+            "description": "Cập nhật thông tin profile của user đang đăng nhập"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Avatar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/avatar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "avatar"]
+            },
+            "description": "Upload ảnh đại diện"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
